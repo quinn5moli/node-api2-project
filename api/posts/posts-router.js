@@ -9,7 +9,8 @@ const Posts = require('./posts-model');
 router.get('/', async (req, res) => {
     try {
         console.log('started')
-        const posts = await Posts.find()
+        const posts = await Posts.find(req.query)
+        res.status(200).json(posts)
 
         console.log('finished', posts)
 
@@ -28,6 +29,27 @@ router.get('/:id', async (req, res) => {
     } catch (error) {
             res.status(500).json({ message: "The post information could not be retrieved" })
     }
+})
+
+router.post('/', async (req, res) => {
+    try {
+        const addPost = await Posts.insert(req.body)
+        if(!req.body.title || !req.body.contents) return res.status(400).json({message: 'Please provide title and contents for the post'})
+        else res.status(201).json(addPost)
+    } catch (error) {
+        res.status(500).json({ message: "There was an error while saving the post to the database" })
+    }
+    // if(!req.body.title || !req.body.contents) {
+    //     res.status(400).json({ message: "Please provide title and contents for the post" })
+    // } else {
+    //     Posts.insert(req.body)
+    //         .then(post => {
+    //             res.status(201).json(post)
+    //         })
+    //         .catch(() => {
+    //             res.status(500).json({ message: "There was an error while saving the post to the database" })
+    //         })
+    // }
 })
 
 
