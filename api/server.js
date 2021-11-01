@@ -14,19 +14,12 @@ const postRoutes = require('./posts/posts-router');
 //middleware
 server.use(helmet());
 server.use(morgan('dev'));
-server.use(cors());
 server.use(express.json());
+server.use(cors());
 
 //use post router
 server.use('/api/posts', postRoutes);
 
-//sanity test for ThunderClient
-server.get('/', (req, res) => {
-    res.status(200).json({
-        status: 200,
-        message: 'API is running',
-        time: new Date().toLocaleTimeString(),
-    })
-})
+
 
 module.exports = server;
