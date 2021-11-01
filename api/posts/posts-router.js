@@ -46,17 +46,16 @@ router.post('/', (req, res) => {
     }
 })
 
-router.put(':id', async (req, res) => {
-    try {
+router.put(':id', (req, res) => {
         const changes = req.body
-        const updated = await Posts.update(req.params.id, changes)
-        // if(!id) return res.status(404).json({ message: 'The post with the specified ID does not exist'})
-        if(!req.body.title || !req.body.contents) return res.status(400).json({ message: 'Please provide title and contents for the post'})
-        res.status(200).json(updated)
-    } catch (error) {
-        if(!post) return res.status(404).json({ message: 'The post with the specified ID does not exist'})
-        else res.status(500).json ({ message: 'The post information could not be modified'})
-    }
+        if(!req.body.title || !req.body.contents) {
+            res.status(400).json({ message: 'Please provide title and contents for the post'})
+        } else { 
+            Posts.update(id, changes)
+            .then((post) => res.status(200).send(post))
+            .catch (() => {
+         res.status(500).json({ message: 'The post information could not be modified'})}
+    )}
 })
 
 router.delete('/:id', async (req, res) => {
