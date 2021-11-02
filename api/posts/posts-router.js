@@ -37,6 +37,9 @@ router.post('/', (req, res) => {
         res.status(400).json({ message: "Please provide title and contents for the post" })
     } else {
         Posts.insert(req.body)
+            .then(({ id }) => {
+                return Posts.findById(id)
+            })
             .then((post) => {
                 res.status(201).json(post)
             })
